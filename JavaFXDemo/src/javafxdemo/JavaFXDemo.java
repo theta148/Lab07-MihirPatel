@@ -1,4 +1,4 @@
-/*
+/* https://github.com/theta148/Lab07-MihirPatel
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
@@ -14,14 +14,14 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -76,14 +76,33 @@ public class JavaFXDemo extends Application{
         RotateTransition rotate = new RotateTransition(Duration.seconds(3), objB);
         rotate.setByAngle(180);
         
-        TranslateTransition move = new TranslateTransition(Duration.seconds(3), objB);
+        TranslateTransition move = new TranslateTransition(Duration.seconds(1.5), objB);
         move.setToX(50);
         move.setToY(-100);
         
         SequentialTransition seq = new SequentialTransition(fade, scale, rotate, move);
-        seq.play();
         
-        Pane root = new Pane(objA, objB);
+        Button start = new Button("Start");
+        Button reset = new Button("Reset");
+        Button exit = new Button("Exit");
+        
+        start.setOnAction(e -> {
+            seq.play();
+        });
+        
+        reset.setOnAction(e -> {
+            seq.play();
+        });
+        
+        exit.setOnAction(e -> {
+            seq.stop();
+        });
+        
+        HBox hb = new HBox(10, start, reset, exit);
+        
+        Pane root = new Pane(objA, objB, hb);
+        hb.setTranslateX(220);
+        hb.setTranslateY(450);
         
         Scene scene = new Scene(root, 500, 500);
         stage.setTitle("j");
