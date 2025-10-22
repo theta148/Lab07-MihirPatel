@@ -4,14 +4,21 @@
  */
 package javafxdemo;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
@@ -34,25 +41,49 @@ public class JavaFXDemo extends Application{
     
     @Override
     public void start(Stage stage) {
-        Circle obj1 = new Circle(50, 50, 30);
-        obj1.setFill(Color.RED);
-        Rectangle rect = new Rectangle(50, 150, 400, 200);
-        rect.setFill(Color.WHITE);
-        rect.setStroke(Color.BLACK);
+        Ellipse objA = new Ellipse(50, 50, 30, 20);
+        objA.setFill(Color.RED);
         
         Path path = new Path();
         
-        //path.getElements().add(new MoveTo(0f, 50f));
-        //path.getElements().add(new CubicCurveTo());
+        path.getElements().add(new MoveTo(50f, 150f));
+        path.getElements().add(new LineTo(450f, 150f));
+        path.getElements().add(new LineTo(450f, 350f));
+        path.getElements().add(new LineTo(50f, 350f));
+        path.getElements().add(new LineTo(50f, 150f));
         
         PathTransition pt = new PathTransition();
-        pt.setPath(rect);
-        pt.setNode(obj1);
+        pt.setPath(path);
+        pt.setNode(objA);
+        pt.setDuration(Duration.millis(9000));
         pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
         pt.setCycleCount(Timeline.INDEFINITE);
+        pt.setInterpolator(Interpolator.LINEAR);
         pt.play();
         
-        Pane root = new Pane(rect, obj1);
+        Ellipse objB = new Ellipse(250, 300, 50, 20);
+        objB.setFill(Color.GREEN);
+        
+        FadeTransition fade = new FadeTransition(Duration.seconds(3), objB);
+        fade.setFromValue(1.0);
+        fade.setToValue(0.25);
+        fade.setAutoReverse(true);
+        
+        ScaleTransition scale = new ScaleTransition(Duration.seconds(1.5), objB);
+        scale.setToX(2.0);
+        scale.setToY(2.0);
+        
+        RotateTransition rotate = new RotateTransition(Duration.seconds(3), objB);
+        rotate.setByAngle(180);
+        
+        TranslateTransition move = new TranslateTransition(Duration.seconds(3), objB);
+        move.setToX(50);
+        move.setToY(-100);
+        
+        SequentialTransition seq = new SequentialTransition(fade, scale, rotate, move);
+        seq.play();
+        
+        Pane root = new Pane(objA, objB);
         
         Scene scene = new Scene(root, 500, 500);
         stage.setTitle("j");
