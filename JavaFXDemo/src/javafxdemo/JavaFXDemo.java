@@ -41,7 +41,7 @@ public class JavaFXDemo extends Application{
     
     @Override
     public void start(Stage stage) {
-        Ellipse objA = new Ellipse(50, 50, 30, 20);
+        Ellipse objA = new Ellipse(50, 150, 30, 20);
         objA.setFill(Color.RED);
         
         Path path = new Path();
@@ -57,9 +57,8 @@ public class JavaFXDemo extends Application{
         pt.setNode(objA);
         pt.setDuration(Duration.millis(9000));
         pt.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pt.setCycleCount(Timeline.INDEFINITE);
+        pt.setCycleCount(1);
         pt.setInterpolator(Interpolator.LINEAR);
-        pt.play();
         
         Ellipse objB = new Ellipse(250, 300, 50, 20);
         objB.setFill(Color.GREEN);
@@ -77,7 +76,6 @@ public class JavaFXDemo extends Application{
         rotate.setByAngle(180);
         
         TranslateTransition move = new TranslateTransition(Duration.seconds(1.5), objB);
-        move.setToX(50);
         move.setToY(-100);
         
         SequentialTransition seq = new SequentialTransition(fade, scale, rotate, move);
@@ -88,14 +86,18 @@ public class JavaFXDemo extends Application{
         
         start.setOnAction(e -> {
             seq.play();
+            pt.play();
+           
         });
         
         reset.setOnAction(e -> {
-            seq.play();
+            seq.playFromStart();
+            pt.playFromStart();
         });
         
         exit.setOnAction(e -> {
-            seq.stop();
+            seq.pause();
+            pt.pause();
         });
         
         HBox hb = new HBox(10, start, reset, exit);
